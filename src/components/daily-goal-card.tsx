@@ -1,126 +1,114 @@
-import { StyleSheet, Text, View } from "react-native";
-import { Circle, Svg } from "react-native-svg";
+import { View, StyleSheet } from "react-native";
+import Svg, { Circle } from "react-native-svg";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { ThemedText } from "./themed-text";
 
-interface DailyGoalCardProps {
-  currentXP: number;
-  goalXP: number;
-}
+const SIZE = 72;
+const STROKE = 7;
+const RADIUS = (SIZE - STROKE) / 2;
+const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
-export function DailyGoalCard({ currentXP, goalXP }: DailyGoalCardProps) {
-  const progress = currentXP / goalXP;
-  const circumference = 2 * Math.PI * 22;
-  const strokeDashoffset = circumference - progress * circumference;
+function ProgressRing({ current, goal }: { current: number; goal: number }) {
+  const pct = Math.min(current / goal, 1);
+  const offset = CIRCUMFERENCE * (1 - pct);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Daily Goal</Text>
-      </View>
-
-      <Text style={styles.description}>
-        Earn {goalXP} XP to complete your goal!
-      </Text>
-
-      <View style={styles.progressContainer}>
-        <View style={styles.progressBarBackground}>
-          <View
-            style={[styles.progressBarFill, { width: `${progress * 100}%` }]}
-          />
-        </View>
-
-        <View style={styles.circularProgress}>
-          <Svg width={56} height={56} viewBox="0 0 56 56">
-            <Circle
-              cx={28}
-              cy={28}
-              r={22}
-              stroke="#E0E0E0"
-              strokeWidth={4}
-              fill="none"
-            />
-            <Circle
-              cx={28}
-              cy={28}
-              r={22}
-              stroke="#4CAF50"
-              strokeWidth={4}
-              fill="none"
-              strokeDasharray={circumference}
-              strokeDashoffset={strokeDashoffset}
-              strokeLinecap="round"
-              transform={`rotate(-90, 28, 28)`}
-            />
-          </Svg>
-          <View style={styles.circularText}>
-            <Text style={styles.circularValue}>{currentXP}</Text>
-            <Text style={styles.circularTotal}>/ {goalXP}</Text>
-          </View>
+    <View style={{ width: SIZE, height: SIZE }}>
+      <Svg width={SIZE} height={SIZE}>
+        <Circle
+          cx={SIZE / 2}
+          cy={SIZE / 2}
+          r={RADIUS}
+          stroke="#E5E5EA"
+          strokeWidth={STROKE}
+          fill="none"
+        />
+        <Circle
+          cx={SIZE / 2}
+          cy={SIZE / 2}
+          r={RADIUS}
+          stroke="#34C759"
+          strokeWidth={STROKE}
+          strokeDasharray={CIRCUMFERENCE}
+          strokeDashoffset={offset}
+          strokeLinecap="round"
+          fill="none"
+          rotation="-90"
+          origin={`${SIZE / 2}, ${SIZE / 2}`}
+        />
+      </Svg>
+      <View style={StyleSheet.absoluteFill}>
+        <View style={styles.ringTextWrap}>
+          <ThemedText style={styles.ringValue}>{current}</ThemedText>
+          <ThemedText style={styles.ringGoal}>/ {goal}</ThemedText>
         </View>
       </View>
     </View>
   );
 }
 
+export function DailyGoalCard({
+  currentXP,
+  goalXP,
+}: {
+  currentXP: number;
+  goalXP: number;
+}) {
+  const pct = Math.min((currentXP / goalXP) * 100, 100);
+
+  return (
+    <View style={styles.card}>
+      <View style={styles.topRow}>
+        <View style={styles.textCol}>
+          <View style={styles.titleRow}>
+
+            <ThemedText style={styles.title}>Daily Goal</ThemedText>
+          </View>
+          <ThemedText style={styles.subtitle}>
+            Earn {goalXP} XP to complete your goal!
+          </ThemedText>
+        </View>
+        <ProgressRing current={currentXP} goal={goalXP} />
+      </View>
+
+      <View style={styles.track}>
+        <View style={[styles.fill, { width: `${pct}%` }]} />
+      </View>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
-  container: {
+  card: {
+    marginHorizontal: 20,
     backgroundColor: "#FFFFFF",
-    borderRadius: 16,
-    padding: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    borderRadius: 18,
+    borderWidth: 1,
+    borderColor: "#ECECEC",
+    padding: 18,
   },
-  header: {
-    marginBottom: 8,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: "#000000",
-  },
-  description: {
-    fontSize: 14,
-    color: "#666666",
+  topRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 16,
   },
-  progressContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  progressBarBackground: {
-    flex: 1,
+  textCol: { flex: 1, paddingRight: 12 },
+  titleRow: { flexDirection: "row", alignItems: "center", gap: 6, marginBottom: 6 },
+  title: { fontSize: 17, fontWeight: "700", color: "#111111" },
+  subtitle: { fontSize: 13, color: "#8E8E93" },
+  track: {
     height: 8,
-    backgroundColor: "#E0E0E0",
     borderRadius: 4,
-    marginRight: 16,
+    backgroundColor: "#E5E5EA",
+    overflow: "hidden",
   },
-  progressBarFill: {
-    height: "100%",
-    backgroundColor: "#4CAF50",
-    borderRadius: 4,
-  },
-  circularProgress: {
-    position: "relative",
-  },
-  circularText: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+  fill: { height: "100%", backgroundColor: "#34C759", borderRadius: 4 },
+  ringTextWrap: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
   },
-  circularValue: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: "#000000",
-  },
-  circularTotal: {
-    fontSize: 10,
-    color: "#666666",
-  },
+  ringValue: { fontSize: 20, fontWeight: "800", color: "#111111" },
+  ringGoal: { fontSize: 11, color: "#8E8E93", marginTop: -2 },
 });

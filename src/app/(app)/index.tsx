@@ -14,12 +14,13 @@ export default function AppHomeScreen() {
         <ScrollView
           style={styles.scrollView}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 40 }}
         >
           <View style={styles.header}>
             <ThemedText style={styles.title}>Ready to Twyst?</ThemedText>
             <View style={styles.badges}>
-              <StatBadge icon="flame" value="12" />
-              <StatBadge icon="sparkle" value="4,527" />
+              <StatBadge icon="flame" value="12" color="#FF7A1A" />
+              <StatBadge icon="sparkle" value="4,527" color="#F5A623" />
             </View>
           </View>
 
@@ -33,7 +34,8 @@ export default function AppHomeScreen() {
                 progress={50}
                 completed={12}
                 total={24}
-                color="#4A90E2"
+                color="#3D8BFF"
+                icon="human"
               />
               <SkillCard
                 title="Yoga & Flexibility"
@@ -41,6 +43,7 @@ export default function AppHomeScreen() {
                 completed={8}
                 total={20}
                 color="#9B59B6"
+                icon="yoga"
               />
               <SkillCard
                 title="Strength Training"
@@ -48,13 +51,15 @@ export default function AppHomeScreen() {
                 completed={5}
                 total={28}
                 color="#E74C3C"
+                icon="dumbbell"
               />
               <SkillCard
                 title="Cardio & HIIT"
                 progress={16}
                 completed={3}
                 total={18}
-                color="#F39C12"
+                color="#F5A623"
+                icon="fire"
               />
               <SkillCard
                 title=""
@@ -62,6 +67,7 @@ export default function AppHomeScreen() {
                 completed={0}
                 total={0}
                 color="#27AE60"
+                icon="lock"
                 locked
               />
               <SkillCard
@@ -69,7 +75,8 @@ export default function AppHomeScreen() {
                 progress={0}
                 completed={0}
                 total={0}
-                color="#1ABC9C"
+                color="#3AB0D8"
+                icon="lock"
                 locked
               />
             </View>
@@ -81,47 +88,30 @@ export default function AppHomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#FFFFFF",
-  },
-  safeArea: {
-    flex: 1,
-  },
-  scrollView: {
-    flex: 1,
-  },
+  container: { flex: 1, backgroundColor: "#FFFFFF" },
+  safeArea: { flex: 1 },
+  scrollView: { flex: 1 },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingTop: 16,
+    paddingTop: 8,
     paddingBottom: 20,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "700",
-    color: "#000000",
-  },
-  badges: {
-    flexDirection: "row",
-    gap: 8,
-  },
-  section: {
-    paddingHorizontal: 20,
-    marginTop: 24,
-    marginBottom: 24,
-  },
+  title: { fontSize: 26, fontWeight: "800", color: "#111111" },
+  badges: { flexDirection: "row", gap: 8 },
+  section: { paddingHorizontal: 20, marginTop: 8, marginBottom: 24 },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: "#000000",
-    marginBottom: 16,
+    fontSize: 22,
+    fontWeight: "800",
+    color: "#111111",
+    marginBottom: 14,
   },
   skillGrid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    gap: 12,
+    justifyContent: "space-between",
+    rowGap: 14,
   },
 });

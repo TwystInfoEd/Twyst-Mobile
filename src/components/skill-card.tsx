@@ -1,74 +1,82 @@
-import { StyleSheet, Text, View } from 'react-native';
-import { Svg, Path } from 'react-native-svg';
+import { View, StyleSheet } from "react-native";
+import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import { ThemedText } from "./themed-text";
 
-interface SkillCardProps {
+function lighten(hex: string, percent: number) {
+  const num = parseInt(hex.replace("#", ""), 16);
+  const amt = Math.round(2.55 * percent);
+  const r = Math.min(255, (num >> 16) + amt);
+  const g = Math.min(255, ((num >> 8) & 0x00ff) + amt);
+  const b = Math.min(255, (num & 0x0000ff) + amt);
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+export function SkillCard({
+  title,
+  progress,
+  completed,
+  total,
+  color,
+  icon,
+  locked = false,
+}: {
   title: string;
   progress: number;
   completed: number;
   total: number;
   color: string;
-  icon?: string;
+  icon: "human" | "yoga" | "dumbbell" | "fire" | "lock";
   locked?: boolean;
-}
+}) {
+  const bgColor = locked ? lighten(color, 45) : color;
 
-export function SkillCard({ title, progress, completed, total, color, locked = false }: SkillCardProps) {
   return (
-    <View style={[styles.container, { backgroundColor: locked ? '#F5F5F5' : color }]}>
-      {locked ? (
-        <View style={styles.lockedContent}>
-          <Svg width={24} height={24} viewBox="0 0 24 24" fill="none" stroke="#999999" strokeWidth={2}>
-            <Path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" strokeLinecap="round" strokeLinejoin="round" />
-          </Svg>
-        </View>
-      ) : (
-        <>
-          <Text style={styles.progress}>{progress}%</Text>
-          <Text style={styles.title}>{title}</Text>
-          <View style={styles.footer}>
-            <Text style={styles.checkmark}>✔</Text>
-            <Text style={styles.completedText}>{completed}/{total}</Text>
+    <View style={styles.card}>
+      <View style={[styles.top, { backgroundColor: bgColor }, locked && styles.topLocked]}>
+        {icon === "lock" ? (
+          <Ionicons name="lock-closed" size={28} color="rgba(255,255,255,0.9)" />
+        ) : (
+          <>
+            <MaterialCommunityIcons name={icon} size={30} color="#FFFFFF" />
+            <ThemedText style={styles.percent}>{progress}%</ThemedText>
+          </>
+        )}
+      </View>
+
+      {!locked && (
+        <View style={styles.bottom}>
+          <ThemedText style={styles.title}>{title}</ThemedText>
+          <View style={styles.metaRow}>
+            <Ionicons name="checkmark-circle" size={14} color="#34C759" />
+            <ThemedText style={styles.meta}>
+              {completed}/{total}
+            </ThemedText>
           </View>
-        </>
+        </View>
       )}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  card: {
+    width: "48%",
     borderRadius: 16,
-    padding: 16,
-    minHeight: 120,
-    justifyContent: 'space-between',
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: "#ECECEC",
+    backgroundColor: "#FFFFFF",
   },
-  lockedContent: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+  top: {
+    height: 130,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 6,
   },
-  progress: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#FFFFFF',
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    marginBottom: 8,
-  },
-  footer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  checkmark: {
-    fontSize: 14,
-    color: '#FFFFFF',
-  },
-  completedText: {
-    fontSize: 14,
-    color: '#FFFFFF',
-    opacity: 0.9,
-  },
+  topLocked: { height: 150 },
+  percent: { color: "#FFFFFF", fontWeight: "800", fontSize: 15 },
+  bottom: { padding: 12 },
+  title: { fontSize: 15, fontWeight: "700", color: "#111111", marginBottom: 4 },
+  metaRow: { flexDirection: "row", alignItems: "center", gap: 4 },
+  meta: { fontSize: 12, color: "#8E8E93" },
 });
