@@ -6,13 +6,18 @@ import { StatChip } from "../../components/stat-chip";
 import { OverviewCard } from "../../components/overview-card";
 import { ThemedText } from "../../components/themed-text";
 import { ThemedView } from "../../components/themed-view";
+import { useRouter } from "expo-router";
 
 export default function ProfileScreen() {
+
+    const router = useRouter();
+
   return (
     <ThemedView style={styles.container}>
       <View style={{ zIndex: 1 }}>
         <ProfileHeader />
       </View>
+
 
       <SafeAreaView style={styles.safeArea} edges={["bottom"]}>
         <ScrollView
@@ -62,21 +67,33 @@ export default function ProfileScreen() {
             </TouchableOpacity>
 
             <ThemedText style={styles.sectionTitle}>Overview</ThemedText>
+              <View style={styles.overviewRow}>
+                      <OverviewCard
+                        icon="flame"
+                        iconColor="#F5A623"
+                        value="102"
+                        label="Day streak"
+                      />
+                      <OverviewCard
+                        icon="percent"
+                        iconColor="#34C759"
+                        value="89%"
+                        label="Avg. accuracy"
+                      />
+                    </View>
 
-            <View style={styles.overviewRow}>
-              <OverviewCard
-                icon="flame"
-                iconColor="#F5A623"
-                value="102"
-                label="Day streak"
-              />
-              <OverviewCard
-                icon="percent"
-                iconColor="#34C759"
-                value="89%"
-                label="Avg. accuracy"
-              />
-            </View>
+                    <ThemedText style={styles.bandStatusTitle}>Band Status</ThemedText>
+
+                    <TouchableOpacity
+                      style={styles.bandStatusBtn}
+                      activeOpacity={0.8}
+                      onPress={() => router.push("/motion-studio")}
+                    >
+                      <ThemedText style={styles.bandStatusBtnText}>
+                        See band status
+                      </ThemedText>
+                    </TouchableOpacity>
+            
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -136,4 +153,25 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   overviewRow: { flexDirection: "row", gap: 12 },
+
+bandStatusBtn: {
+  borderWidth: 1,
+  borderColor: "#E2E2E5",
+  borderRadius: 12,
+  paddingVertical: 14,
+  alignItems: "center",
+  marginBottom: 28,
+},
+bandStatusBtnText: {
+  fontSize: 15,
+  fontWeight: "700",
+  color: "#2F80ED",
+},
+bandStatusTitle: {
+  fontSize: 22,
+  fontWeight: "800",
+  color: "#111111",
+  marginTop: 28,
+  marginBottom: 12,
+},
 });
