@@ -1,17 +1,6 @@
 import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
-
-import { ProfileHeader } from "../../components/profile-header";
-import { StatChip } from "../../components/stat-chip";
-import { OverviewCard } from "../../components/overview-card";
-import { ThemedText } from "../../components/themed-text";
-import { ThemedView } from "../../components/themed-view";
-
-import { ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons } from "@expo/vector-icons";
-
 import { ProfileHeader } from "../../components/profile-header";
 import { StatChip } from "../../components/stat-chip";
 import { OverviewCard } from "../../components/overview-card";
