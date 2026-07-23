@@ -16,6 +16,7 @@ import { StatusSummaryBlock } from "../../components/status-summary-block";
 import { BandRow } from "../../components/band-row";
 import { ThemedText } from "../../components/themed-text";
 import { ThemedView } from "../../components/themed-view";
+import {useEffect} from "react";
 
 const CONNECTION_COLOR = {
   connected: "#34C759",
@@ -26,10 +27,13 @@ const CONNECTION_COLOR = {
 
 export default function MotionStudioScreen() {
   const router = useRouter();
-  const { data, loading, error, refetch } = useMotionStatus();
-  const [mode, setMode] = useState<"single" | "dual">(
-    data?.mode ?? "single"
-  );
+
+const { data, loading, error, refetch } = useMotionStatus();
+const [mode, setMode] = useState<"single" | "dual">("single");
+
+useEffect(() => {
+  if (data?.mode) setMode(data.mode);
+}, [data?.mode]);
 
   const bandStatusColor = data?.mainBand
     ? CONNECTION_COLOR[data.mainBand.connection]
